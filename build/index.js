@@ -25,68 +25,53 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-// Función para obtener los datos de los planes desde la API
-const getPlansData = token => {
-  const options = getEfipayOptions();
-  const url = 'https://efipay-sag.redpagos.co/api/v1/subscriptions/plan/group/' + options.group_id + '/all';
-  return fetch(url, {
-    headers: {
-      'Authorization': 'Bearer ' + token
-    }
-  }).then(response => response.json()).then(data => data).catch(error => console.error('Error fetching plans data:', error));
-};
-
-// Función para obtener las opciones de Efipay
-const getEfipayOptions = () => {
-  return efipayOptions || {};
-};
-
-// Función para obtener la opción de Wordpress
-
 function Edit({
   attributes,
   setAttributes
 }) {
-  const [plans, setPlans] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [token, setToken] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
-  const [loading, setLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true);
+  // Función para obtener las opciones de Efipay
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    // Obtener el token de autorización
-    const options = getEfipayOptions();
-    setToken(options.api_key);
-
-    // Obtener los datos de los planes
-    getPlansData(options.api_key, options.group_id).then(data => {
-      setPlans(data);
-      setLoading(false);
-      // Actualizar los atributos del bloque con la información de los planes
+    if (attributes.plans.length === 0 || attributes.plans.length !== efipayPlans.length) {
       setAttributes({
-        plans: JSON.stringify(data)
+        plans: efipayPlans || []
       });
-    });
-  }, []);
+    }
+  });
+  const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)();
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)()
-  }, loading ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Loading...") : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    ...blockProps
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.SelectControl, {
+    multiple: true,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Selecciona los planes a mostrar:'),
+    value: attributes.selectedPlans,
+    onChange: plans => {
+      setAttributes({
+        selectedPlans: plans
+      });
+    },
+    options: attributes.plans.map(plan => ({
+      value: JSON.stringify(plan),
+      label: plan.name
+    })),
+    __nextHasNoMarginBottom: true
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Vista previa"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "plans-container"
-  }, plans.map(plan => {
+  }, attributes.selectedPlans && attributes.selectedPlans.map(plan => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "plan-card",
-      key: plan.id
+      key: JSON.parse(plan).id
     }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", {
       className: "plan-name"
-    }, plan.name), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    }, JSON.parse(plan).name), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
       className: "plan-description"
-    }, plan.description), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    }, JSON.parse(plan).description), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
       className: "plan-price"
-    }, "Precio: ", plan.price), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
-      isPrimary: true,
-      href: plan.checkout_url,
-      target: "_blank"
-    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Suscribirse', 'efipay-suscriptions')));
-    return null;
-  }))));
+    }, "Precio: ", JSON.parse(plan).price), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+      href: JSON.parse(plan).checkout_url,
+      target: "_blank",
+      rel: "noopener"
+    }, "Suscribirse"));
+  })));
 }
 
 /***/ }),
@@ -98,31 +83,21 @@ function Edit({
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./style.scss */ "./src/style.scss");
-/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./edit */ "./src/edit.js");
-/* harmony import */ var _save__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./save */ "./src/save.js");
-/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./block.json */ "./src/block.json");
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./style.scss */ "./src/style.scss");
+/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./edit */ "./src/edit.js");
+/* harmony import */ var _save__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./save */ "./src/save.js");
+/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./block.json */ "./src/block.json");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__);
 
 
 
 
 
 
-
-
-
-
-(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.registerBlockType)(_block_json__WEBPACK_IMPORTED_MODULE_5__.name, {
+(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__.registerBlockType)(_block_json__WEBPACK_IMPORTED_MODULE_4__.name, {
   attributes: {
     plans: {
       type: 'array',
@@ -133,77 +108,8 @@ __webpack_require__.r(__webpack_exports__);
       default: []
     }
   },
-  edit: ({
-    attributes,
-    setAttributes
-  }) => {
-    // Función para obtener las opciones de Efipay
-    (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-      if (attributes.plans.length === 0 || attributes.plans.length !== efipayPlans.length) {
-        setAttributes({
-          plans: efipayPlans || []
-        });
-      }
-    });
-    const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_6__.useBlockProps)();
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      ...blockProps
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_7__.SelectControl, {
-      multiple: true,
-      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Selecciona los planes a mostrar:'),
-      value: attributes.selectedPlans,
-      onChange: plans => {
-        setAttributes({
-          selectedPlans: plans
-        });
-      },
-      options: attributes.plans.map(plan => ({
-        value: JSON.stringify(plan),
-        label: plan.name
-      })),
-      __nextHasNoMarginBottom: true
-    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Vista previa"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "plans-container"
-    }, attributes.selectedPlans && attributes.selectedPlans.map(plan => {
-      return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-        className: "plan-card",
-        key: JSON.parse(plan).id
-      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", {
-        className: "plan-name"
-      }, JSON.parse(plan).name), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-        className: "plan-description"
-      }, JSON.parse(plan).description), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-        className: "plan-price"
-      }, "Precio: ", JSON.parse(plan).price), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
-        href: JSON.parse(plan).checkout_url,
-        target: "_blank"
-      }, "Suscribirse"));
-    })));
-  },
-  save: ({
-    attributes
-  }) => {
-    const blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_6__.useBlockProps.save();
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      ...blockProps
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "plans-container"
-    }, attributes.selectedPlans && attributes.selectedPlans.map(plan => {
-      return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-        className: "plan-card",
-        key: JSON.parse(plan).id
-      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", {
-        className: "plan-name"
-      }, JSON.parse(plan).name), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-        className: "plan-description"
-      }, JSON.parse(plan).description), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-        className: "plan-price"
-      }, "Precio: ", JSON.parse(plan).price), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
-        href: JSON.parse(plan).checkout_url,
-        target: "_blank"
-      }, "Suscribirse"));
-    })));
-  }
+  edit: _edit__WEBPACK_IMPORTED_MODULE_2__["default"],
+  save: _save__WEBPACK_IMPORTED_MODULE_3__["default"]
 });
 
 /***/ }),
@@ -224,35 +130,33 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
-
 
 
 
 function Save({
   attributes
 }) {
-  // Deserializar los atributos del bloque para obtener la información de los planes
-  const plans = attributes.plans ? JSON.parse(attributes.plans) : [];
+  const blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps.save();
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    ..._wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps.save()
+    ...blockProps
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "plans-container"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, "Hola"), plans.map(plan => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "plan-card",
-    key: plan.id
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", {
-    className: "plan-name"
-  }, plan.name), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-    className: "plan-description"
-  }, plan.description), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-    className: "plan-price"
-  }, "Precio: ", plan.price), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
-    isPrimary: true,
-    href: plan.checkout_url,
-    target: "_blank"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Suscribirse', 'efipay-suscriptions'))))));
+  }, attributes.selectedPlans && attributes.selectedPlans.map(plan => {
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "plan-card",
+      key: JSON.parse(plan).id
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", {
+      className: "plan-name"
+    }, JSON.parse(plan).name), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+      className: "plan-description"
+    }, JSON.parse(plan).description), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+      className: "plan-price"
+    }, "Precio: ", JSON.parse(plan).price), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+      href: JSON.parse(plan).checkout_url,
+      target: "_blank",
+      rel: "noopener"
+    }, "Suscribirse"));
+  })));
 }
 
 /***/ }),
@@ -325,7 +229,7 @@ module.exports = window["wp"]["i18n"];
   \************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"create-block/efipay-suscriptions","version":"0.1.0","title":"Efipay Suscriptions","category":"widgets","icon":"money","description":"Example block scaffolded with Create Block tool.","example":{},"supports":{"html":false},"textdomain":"efipay-suscriptions","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"create-block/efipay-suscriptions","version":"0.1.0","title":"Efipay Suscriptions","category":"widgets","icon":"money","description":"Efipay Suscripciones es un plugin para WordPress que te permite visualizar suscripciones recurrentes mediante la API de Efipay.","example":{},"supports":{"html":false},"textdomain":"efipay-suscriptions","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js"}');
 
 /***/ })
 

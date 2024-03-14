@@ -8,21 +8,21 @@
                     <div >
                         <img class="img-fluid my-3" src="<?php echo plugin_dir_url(__FILE__) . '../src/img/logo.svg'; ?>" alt="Efipay Logo">
                         <h2>Bienvenido a Efipay Suscripciones</h2>
-                        <p>¡Gestiona tus suscripciones recurrentes fácilmente con Efipay! Con nuestro plugin, puedes crear y administrar planes de suscripción, así como controlar tus suscriptores de manera eficiente.</p>
+                        <p>¡Gestiona tus suscripciones recurrentes fácilmente con Efipay! Con nuestro plugin, puedes crear bloques de tus planes, así como visualizar tus suscriptores de manera eficiente.</p>
                     </div>
                     <div class="cross-center">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Sobre Efipay Suscripciones</h5>
-                                <p class="card-text">Efipay es un plugin para WordPress que te permite gestionar suscripciones recurrentes mediante la API de Efipay.</p>
+                                <p class="card-text">Efipay Suscripciones es un plugin para WordPress que te permite visualizar suscripciones recurrentes mediante la API de Efipay.</p>
                             </div>
                         </div>
                         <div class="card my-3">
                             <div class="card-body">
                                 <h5 class="card-title">Características principales</h5>
                                 <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Gestión de planes de suscripción</li>
-                                    <li class="list-group-item">Control de suscriptores</li>
+                                    <li class="list-group-item">Visualización de planes de suscripción</li>
+                                    <li class="list-group-item">Bloques de tus planes</li>
                                     <li class="list-group-item">Integración con la API de Efipay</li>
                                 </ul>
                             </div>

@@ -6,7 +6,7 @@
   "title": "Efipay Suscriptions",
   "category": "widgets",
   "icon": "money",
-  "description": "Example block scaffolded with Create Block tool.",
+  "description": "Efipay Suscripciones es un plugin para WordPress que te permite visualizar suscripciones recurrentes mediante la API de Efipay.",
   "example": {},
   "supports": {
     "html": false

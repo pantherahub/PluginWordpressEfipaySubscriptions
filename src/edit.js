@@ -1,78 +1,45 @@
 import { __ } from '@wordpress/i18n';
-import { useBlockProps, isBootstrapStyles } from '@wordpress/block-editor';
-import { useEffect, useState } from 'react';
-import { Button, SelectControl } from '@wordpress/components';
+import { useBlockProps } from '@wordpress/block-editor';
+import { useEffect} from 'react';
+import { SelectControl } from '@wordpress/components';
 
-
-// Función para obtener los datos de los planes desde la API
-const getPlansData = (token) => {
-    const options = getEfipayOptions();
-    const url = 'https://soporte.efipay.co/api/v1/subscriptions/plan/group/' + options.group_id + '/all';
-    return fetch(url, {
-        headers: {
-            'Authorization': 'Bearer ' + token
-        }
-    })
-    .then(response => response.json())
-    .then(data => data)
-    .catch(error => console.error('Error fetching plans data:', error));
-};
-
-// Función para obtener las opciones de Efipay
-const getEfipayOptions = () => {
-    return efipayOptions || {};
-};
-
-// Función para obtener la opción de Wordpress
 
 export default function Edit({ attributes, setAttributes }) {
-    const [plans, setPlans] = useState([]);
-    const [token, setToken] = useState('');
-    const [loading, setLoading] = useState(true);
-    useEffect(() => {
-        // Obtener el token de autorización
-        const options = getEfipayOptions();
-        setToken(options.api_key);
-
-        // Obtener los datos de los planes
-        getPlansData(options.api_key, options.group_id)
-            .then(data => {
-                setPlans(data);
-                setLoading(false);
-                // Actualizar los atributos del bloque con la información de los planes
-                setAttributes({ plans: JSON.stringify(data) });
-            });
-   
-    }, []);
-
-      
-
-    return (
-        <div { ...useBlockProps() }>
-            {loading ? (
-                <p>Loading...</p>
-            ) : (
-                <>
-                    { (
-                        <div className="plans-container">
-                            {plans.map(plan => {
-                                    return (
-                                        <div className="plan-card" key={plan.id}>
-                                            <h3 className="plan-name">{plan.name}</h3>
-                                            <p className="plan-description">{plan.description}</p>
-                                            <p className="plan-price">Precio: {plan.price}</p>
-                                            <Button isPrimary href={plan.checkout_url} target="_blank">
-                                                {__('Suscribirse', 'efipay-suscriptions')}
-                                            </Button>
-                                        </div>
-                                    );
-
-                                return null;
-                            })}
-                        </div>
-                    )}
-                </>
-            )}
-        </div>
-    );
+		// Función para obtener las opciones de Efipay
+		useEffect(() => {
+            if(attributes.plans.length === 0 || attributes.plans.length !== efipayPlans.length){
+                setAttributes({ plans: efipayPlans || [] });
+            }
+        })
+        
+            const blockProps = useBlockProps();
+        
+            return (
+                <div {...blockProps}>
+                    <SelectControl
+                        multiple
+                        label={ __( 'Selecciona los planes a mostrar:' ) }
+                        value={ attributes.selectedPlans } 
+                        onChange={ ( plans ) => {
+                            setAttributes({ selectedPlans: plans });
+                        } }
+                        options={ attributes.plans.map(plan => ({ value: JSON.stringify(plan), label: plan.name })) }
+                        __nextHasNoMarginBottom
+                    />
+                    <p>Vista previa</p>
+                    <div className="plans-container">
+                
+                        {attributes.selectedPlans && attributes.selectedPlans.map(plan => {
+                            return (
+                                <div className="plan-card" key={JSON.parse(plan).id}>
+                                    <h3 className="plan-name">{JSON.parse(plan).name}</h3>
+                                    <p className="plan-description">{JSON.parse(plan).description}</p>
+                                    <p className="plan-price">Precio: {JSON.parse(plan).price}</p>
+                                    <a href={JSON.parse(plan).checkout_url} target="_blank" rel="noopener">Suscribirse</a>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            );
 }
