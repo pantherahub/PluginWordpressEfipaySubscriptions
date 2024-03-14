@@ -8,7 +8,7 @@ if ($options && isset($options['api_key'])) {
 
     // Crear los parámetros de la solicitud
     $group_id = isset($options['group_id']) ? $options['group_id'] : '';
-    $request_url = 'https://efipay-sag.redpagos.co/api/v1/subscriptions/subscription';
+    $request_url = 'https://soporte.efipay.co/api/v1/subscriptions/subscription';
     $request_args = array(
         'headers' => array(
             'Authorization' => 'Bearer ' . $api_key
