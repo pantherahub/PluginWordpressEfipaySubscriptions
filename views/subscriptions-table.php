@@ -23,9 +23,10 @@ if ($options && isset($options['api_key'])) {
         // Decodificar la respuesta JSON
         $body = wp_remote_retrieve_body($response);
         $data = json_decode($body);
+        $subscriptions = (is_object($data) && isset($data->data) && is_array($data->data)) ? $data->data : array();
 
-        // Comprobar si se obtuvieron datos válidos
-        if ($data && (is_array($data) || is_object($data))) {
+        // La respuesta es paginada: las suscripciones viven en data, no en la raíz.
+        if (!empty($subscriptions)) {
             ?>
             <div class="container my-5">
             <h2>Suscripciones</h2>
@@ -44,16 +45,16 @@ if ($options && isset($options['api_key'])) {
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($data as $subscription) : ?>
+                    <?php foreach ($subscriptions as $subscription) : ?>
                         <tr>
-                            <td><?php echo $subscription->subscription_plan_id; ?></td>
-                            <td><?php echo $subscription->subscriber_id; ?></td>
-                            <td><?php echo $subscription->trial_ends_at; ?></td>
-                            <td><?php echo $subscription->discount_ends_at ?? 'N/A'; ?></td>
-                            <td><?php echo $subscription->starts_at; ?></td>
-                            <td><?php echo $subscription->ends_at; ?></td>
-                            <td><?php echo $subscription->grace_ends_at; ?></td>
-                            <td><?php echo $subscription->canceled_at ?? 'N/A'; ?></td>
+                            <td><?php echo esc_html($subscription->subscription_plan_id); ?></td>
+                            <td><?php echo esc_html($subscription->subscriber_id); ?></td>
+                            <td><?php echo esc_html($subscription->trial_ends_at ?: 'N/A'); ?></td>
+                            <td><?php echo esc_html($subscription->discount_ends_at ?: 'N/A'); ?></td>
+                            <td><?php echo esc_html($subscription->starts_at ?: 'N/A'); ?></td>
+                            <td><?php echo esc_html($subscription->ends_at ?: 'N/A'); ?></td>
+                            <td><?php echo esc_html($subscription->grace_ends_at ?: 'N/A'); ?></td>
+                            <td><?php echo esc_html($subscription->canceled_at ?: 'N/A'); ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
