@@ -16,5 +16,10 @@
 	},
 	"devDependencies": {
 		"@wordpress/scripts": "^37.2.0"
+	},
+	"overrides": {
+		"serialize-javascript": "7.1.4",
+		"markdownlint-cli": "0.50.1",
+		"katex": "0.18.2"
 	}
 }
