@@ -25,7 +25,7 @@ if ($options && isset($options['api_key'])) {
         $data = json_decode($body);
 
         // Comprobar si se obtuvieron datos válidos
-        if ($data && is_array($data)) {
+        if ($data && (is_array($data) || is_object($data))) {
             ?>
             <div class="container my-5">
             <h2>Suscripciones</h2>

@@ -24,7 +24,7 @@ if ($options && isset($options['api_key'])) {
         // Decodificar la respuesta JSON
         $body = wp_remote_retrieve_body($response);
         $data = json_decode($body);
-        update_option('efipay_plans', $data); 
+        update_option('efipay_plans', $data);
         update_option('last_updated_plans', date('d/m/Y - g:ia'));
 
         // Comprobar si se obtuvieron datos válidos
